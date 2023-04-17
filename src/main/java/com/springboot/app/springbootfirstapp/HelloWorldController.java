@@ -36,24 +36,14 @@ public class HelloWorldController {
 
     @PostMapping("/checkans") // http://localhost:8080/checkans
     public int checkans(@RequestBody String answer) {
-        System.out.println(answer);
+    // curl -X POST -H "Content-Type: application/json" -d '{"message":"Hello World!"}' http://localhost:8080/send
+        // System.out.println(answer);
         //extract the answer from the JSON string {"data":"hydrogen"} to "hydrogen"
         String extractedAnswer = answer.substring(answer.indexOf(":") + 2, answer.length() - 2);
         System.out.println(extractedAnswer);
         int points = QuestionGenerator.checkAnswer(extractedAnswer);
         System.out.println(points);
         return points;
-    }
-
-    // add a new POST method to allow an answer to be posted in a JSON format
-    // curl -X POST -H "Content-Type: application/json" -d '{"message":"Hello World!"}' http://localhost:8080/send
-    @PostMapping("/send")
-    public String send(@RequestBody String message) {
-        // print the message to the console
-        System.out.println(message);
-        // remove the last char from message
-        message = message.substring(0, message.length() - 1);
-        return "You chose: " + message;
     }
 
 }
