@@ -22,7 +22,7 @@ public class HelloWorldController {
     
     }
 
-    @GetMapping("/getq") // http://localhost:8080/randq
+    @GetMapping("/getq") // http://localhost:8080/api/getq
     public String randq() {
         QuestionGenerator game = new QuestionGenerator();
         game.getRandomNbTable();
@@ -34,11 +34,14 @@ public class HelloWorldController {
         return assembledPrompt;
     }
 
-    @PostMapping("/checkans") // http://localhost:8080/checkans
-    public int checkans(@RequestBody String answer) {
+    @GetMapping("/bots") // http://localhost:8080/api/botscore
+    public String botscore() {
+        return QuestionGenerator.botAnswer();
+    }
+
     // curl -X POST -H "Content-Type: application/json" -d '{"message":"Hello World!"}' http://localhost:8080/send
-        // System.out.println(answer);
-        //extract the answer from the JSON string {"data":"hydrogen"} to "hydrogen"
+    @PostMapping("/checkans") // http://localhost:8080/checkans 
+    public int checkans(@RequestBody String answer) { 
         String extractedAnswer = answer.substring(answer.indexOf(":") + 2, answer.length() - 2);
         System.out.println(extractedAnswer);
         int points = QuestionGenerator.checkAnswer(extractedAnswer);

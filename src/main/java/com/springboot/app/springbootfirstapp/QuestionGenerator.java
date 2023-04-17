@@ -187,6 +187,60 @@ public class QuestionGenerator {
         return assembledPrompt;
     }
 
+    public static String botAnswer() {
+        String botsChoice = "";
+        if (chosenFilter.equals("Any")) {
+            try {
+                Statement stmt = conn.createStatement();
+                // randomly choose a valid answer from the chosen table
+                ResultSet rs = stmt.executeQuery("SELECT * FROM " + chosenTable + " ORDER BY RANDOM() LIMIT 1");
+                botsChoice = rs.getString(1);
+                // botsChoice is an int, so we need to find what the corresponding string is in the chosen table by SELECTing the string from the table whose row id is equal to the int
+                String wantedString = "SELECT " + chosenTable + " FROM " + chosenTable + " WHERE rowid = " + botsChoice;
+                ResultSet rs2 = stmt.executeQuery(wantedString);
+                botsChoice = rs2.getString(1);
+                System.out.println("Bot Answer: " + botsChoice);
+                
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        if (chosenFilter.equals("Begins With The Letter")) {
+            try {
+                Statement stmt = conn.createStatement();
+                // select a random entry from the chosen table
+                ResultSet rs = stmt.executeQuery("SELECT * FROM " + chosenTable + " WHERE SUBSTR(" + chosenTable + ", 1, 1) = '" + randomLetter + "' ORDER BY RANDOM() LIMIT 1");
+                botsChoice = rs.getString(1);
+                String wantedString = "SELECT " + chosenTable + " FROM " + chosenTable + " WHERE rowid = " + botsChoice;
+                ResultSet rs2 = stmt.executeQuery(wantedString);
+                botsChoice = rs2.getString(1);
+                System.out.println("Bot Answer beginning with correct letter: " + botsChoice);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        if (chosenFilter.equals("Ends With The Letter")) {
+            try {
+                Statement stmt = conn.createStatement();
+                // select a random entry from the chosen table
+                ResultSet rs = stmt.executeQuery("SELECT * FROM " + chosenTable + " WHERE SUBSTR(" + chosenTable + ", -1, 1) = '" + randomLetter + "' ORDER BY RANDOM() LIMIT 1");
+                botsChoice = rs.getString(1);
+                String wantedString = "SELECT " + chosenTable + " FROM " + chosenTable + " WHERE rowid = " + botsChoice;
+                ResultSet rs2 = stmt.executeQuery(wantedString);
+                botsChoice = rs2.getString(1);
+                System.out.println("Bot Answer ending with correct letter: " + botsChoice);
+                
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        return botsChoice;
+
+    }
+
     public static int checkAnswer(String potentialAnswer) {
         pointsRewarded = 0;
         if (chosenFilter.equals("Any")) {
@@ -250,8 +304,8 @@ public class QuestionGenerator {
             }
         }
         return pointsRewarded;
-         
     }
+
     
     public static void main(String[] args) {
         // do nothing
