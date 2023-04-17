@@ -48,15 +48,8 @@ public class QuestionGenerator {
                 tables[i] = rs.getString("name");
                 i++;
             }
-            
-            // for (int j = 0; j < i; j++) { // print the table names
-            //     System.out.println(tables[j]);
-            // }
-            
             int random = (int) (Math.random() * i); // choose a random table from the array
             chosenTable = tables[random];
-            // System.out.println("Randomly Chosen Table: " + chosenTable); // print the randomly chosen table name
-            // conn.close();
             
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -64,8 +57,8 @@ public class QuestionGenerator {
     }
 
     public void getReadableNounFromTableName() {
-        String table = chosenTable; // sets table to the randomly chosen table
-        String NOUN = "A Noun"; // sets NOUN attribute to specific string based off of the randomly chosen table
+        String table = chosenTable; // set table to the randomly chosen table
+        String NOUN = "A Noun"; // set NOUN attribute to specific string based off of the randomly chosen table
             if (table.equals("all_usa_states")) {
                 NOUN = "A State in the USA";
             } else if (table.equals("many_english_words")) {
