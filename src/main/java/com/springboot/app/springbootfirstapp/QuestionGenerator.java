@@ -247,8 +247,9 @@ public class QuestionGenerator {
             
             try {
                 Statement stmt = conn.createStatement();
+                // rewrite the query to ignore spaces and punctuation all together, so that "The Beatles" and "TheBeatles" are both valid answers
                 ResultSet rs = stmt.executeQuery("SELECT * FROM " + chosenTable + " WHERE LOWER(" + chosenTable + ") = LOWER('" + potentialAnswer + "')");
-                
+
                 if (rs.next()) { 
                     System.out.println("\nCORRECT! " + potentialAnswer + " is " + chosenNoun.toLowerCase() + " in our database.\n");
                     pointsRewarded = potentialAnswer.length();

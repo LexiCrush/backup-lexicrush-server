@@ -39,6 +39,7 @@ public class HelloWorldController {
         return QuestionGenerator.botAnswer();
     }
 
+
     // curl -X POST -H "Content-Type: application/json" -d '{"message":"Hello World!"}' http://localhost:8080/send
     @PostMapping("/checkans") // http://localhost:8080/checkans 
     public int checkans(@RequestBody String answer) { 
@@ -48,5 +49,4 @@ public class HelloWorldController {
         System.out.println(points);
         return points;
     }
-
 }
