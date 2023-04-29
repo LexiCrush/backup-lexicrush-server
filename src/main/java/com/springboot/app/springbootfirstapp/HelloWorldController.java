@@ -3,7 +3,7 @@ package com.springboot.app.springbootfirstapp;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+// import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 // import org.springframework.stereotype.Controller;
@@ -15,20 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class HelloWorldController {
     
-    @GetMapping("/getq") // http://localhost:8080/api/getq
+    @GetMapping("/getq")
     public String randq() throws Exception {
         String q = QuestGenerator.getRandomQuestion();
         System.out.println("GET Question: " + q);
         return q;
     }
 
-    // @GetMapping("/bots") // http://localhost:8080/api/botscore
-    // public String botscore() {
-    //     return "TODO";
-    // }
+    @GetMapping("/bot")
+    //takes in a question as raw text param and returns a score
+    public String botscore(@RequestParam String question) throws Exception {
+        question = question.replaceAll("%20", " ");
+        System.out.println("GET Question: " + question);
+        String botAnswer = QuestGenerator.botAnswer(question);
+        System.out.println("botAnswer: " + botAnswer);
+        return botAnswer;
+    }
 
-
-    // curl -X POST -H "Content-Type: application/json" -d '{"message":"Hello World!"}' http://localhost:8080/send
     @PostMapping("/checkans") // http://localhost:8080/checkans 
     public int checkans(@RequestParam String question, @RequestParam String answer) throws Exception {
         System.out.println("POST Question: " + question);

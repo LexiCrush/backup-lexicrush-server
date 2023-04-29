@@ -18,6 +18,7 @@ public class QuestGenerator {
     private static final Map<String, String> nounToTables;
     
     static {
+
         Map<String, String> nounsMap = new HashMap<>();
 
         nounsMap.put("all_usa_states", "A State in the USA");
@@ -146,20 +147,80 @@ public class QuestGenerator {
             }
         }        
     }
-       
+    
+    public static String botAnswer(String question) throws Exception {
+        question = question.toLowerCase(Locale.ENGLISH);
+        String[] parts = QuestionUtil.parseQuestion(question);
+        String randQuestType = parts[0];
+        String noun = parts[1];
+        String letter = parts[2];
+        String tableName = nounToTables.get(noun);
 
+        if (QuestionUtil.QUEST_TYPE_ANY.equals(randQuestType))  {
+            // return a random word from the table called tableName
+            try (Connection conn = DBUtil.getConnection()) {
+                try (Statement stmt = conn.createStatement()) {
+                    try (ResultSet rs = stmt.executeQuery("SELECT " + tableName + " FROM " + tableName)) {
+                        
+                        List<String> words = new ArrayList<>();
+                        while (rs.next()) {
+                            words.add(rs.getString(1)); 
+                        }
 
-    public static void main(String[] args) {
-        
-        try {
-        
-            String question = "Name A State in the USA";
-            String answer = "Indiana";
-            int score = checkAnswer(question, answer);
-            System.out.println("Score: " + score);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+                        int randomIdx = (int) (Math.random() * words.size()); 
+                        String randomWord = words.get(randomIdx);
+                        return randomWord;
+                    }
+                }
+            }
         }
+
+        else if (QuestionUtil.QUEST_TYPE_BEGIN.equals(randQuestType)) {
+            try (Connection conn = DBUtil.getConnection()) {
+                try (Statement stmt = conn.createStatement()) {
+                    // does not need to be protected from SQL injection because user input is not used and the letter is a single character
+                    try (ResultSet rs = stmt.executeQuery("SELECT " + tableName + " FROM " + tableName + " WHERE " + tableName + " LIKE '" + letter + "%'")) {
+                        List<String> words = new ArrayList<>();
+                        while (rs.next()) {
+                            words.add(rs.getString(1)); 
+                        }
+
+                        int randomIdx = (int) (Math.random() * words.size()); 
+                        String randomWord = words.get(randomIdx);
+                        return randomWord;
+                    }
+                }
+            }
+        }
+
+        else if (QuestionUtil.QUEST_TYPE_END.equals(randQuestType)) {
+            try (Connection conn = DBUtil.getConnection()) {
+                try (Statement stmt = conn.createStatement()) {
+                    try (ResultSet rs = stmt.executeQuery("SELECT " + tableName + " FROM " + tableName + " WHERE " + tableName + " LIKE '%" + letter + "'")) {
+                        
+                        List<String> words = new ArrayList<>();
+                        while (rs.next()) {
+                            words.add(rs.getString(1)); 
+                        }
+
+                        int randomIdx = (int) (Math.random() * words.size()); 
+                        String randomWord = words.get(randomIdx);
+                        return randomWord;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        String getq = QuestGenerator.getRandomQuestion();
+        System.out.println(getq);
+        String answer = "apple";
+        int score = QuestGenerator.checkAnswer(getq, answer);
+        System.out.println(score);
+        String botAnswer = QuestGenerator.botAnswer(getq);
+        System.out.println(botAnswer);
     }
 }

@@ -63,7 +63,7 @@ public class QuestionUtil {
 
     public static void main(String[] args) {
         
-        System.out.println(Arrays.toString(parseQuestion("name abc that ends with the letter d")));
+        System.out.println(Arrays.toString(parseQuestion("name a state in the usa that ends with the letter d")));
         System.out.println(Arrays.toString(parseQuestion("name abc that starts with the letter d")));
         System.out.println(Arrays.toString(parseQuestion("name abc")));
     }
