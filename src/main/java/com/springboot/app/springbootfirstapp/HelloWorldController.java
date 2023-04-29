@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 // import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,39 +15,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class HelloWorldController {
     
-    // http://localhost:8080/getdb 
-    @GetMapping("/getdb") 
-    public String getdb() {
-        // select a random row from the database and return it as a string
-        return SQLiteConnector.displayAllTables();
-    
-    }
-
     @GetMapping("/getq") // http://localhost:8080/api/getq
-    public String randq() {
-        QuestionGenerator game = new QuestionGenerator();
-        game.getRandomNbTable();
-        game.getReadableNounFromTableName();
-        game.getFilter();
-        game.getMode();
-        String assembledPrompt = QuestionGenerator.promptAssembler();
-        System.out.println(QuestionGenerator.promptAssembler());
-        return assembledPrompt;
+    public String randq() throws Exception {
+        String q = QuestGenerator.getRandomQuestion();
+        System.out.println("GET Question: " + q);
+        return q;
     }
 
-    @GetMapping("/bots") // http://localhost:8080/api/botscore
-    public String botscore() {
-        return QuestionGenerator.botAnswer();
-    }
+    // @GetMapping("/bots") // http://localhost:8080/api/botscore
+    // public String botscore() {
+    //     return "TODO";
+    // }
 
 
     // curl -X POST -H "Content-Type: application/json" -d '{"message":"Hello World!"}' http://localhost:8080/send
     @PostMapping("/checkans") // http://localhost:8080/checkans 
-    public int checkans(@RequestBody String answer) { 
-        String extractedAnswer = answer.substring(answer.indexOf(":") + 2, answer.length() - 2);
-        System.out.println(extractedAnswer);
-        int points = QuestionGenerator.checkAnswer(extractedAnswer);
-        System.out.println(points);
-        return points;
+    public int checkans(@RequestParam String question, @RequestParam String answer) throws Exception {
+        System.out.println("POST Question: " + question);
+        System.out.println("POST Answer: " + answer);
+        System.out.println("POST Result: " + QuestGenerator.checkAnswer(question, answer));
+        return QuestGenerator.checkAnswer(question, answer);
     }
 }
