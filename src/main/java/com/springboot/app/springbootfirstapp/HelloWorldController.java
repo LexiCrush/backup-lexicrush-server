@@ -25,11 +25,20 @@ public class HelloWorldController {
     @GetMapping("/bot")
     //takes in a question as raw text param and returns a score
     public String botscore(@RequestParam String question) throws Exception {
-        question = question.replaceAll("%20", " ");
+        // question = question.replaceAll("%20", " ");
         System.out.println("GET Question: " + question);
         String botAnswer = QuestGenerator.botAnswer(question);
         System.out.println("botAnswer: " + botAnswer);
         return botAnswer;
+    }
+
+    @GetMapping("/hint")
+    //takes in a question as raw text param and returns a hint
+    public String hint(@RequestParam String question) throws Exception {
+        // question = question.replaceAll("%20", " ");
+        String hint = HintGenerator.makeHint(question);
+        System.out.println("hint: " + hint);
+        return hint;
     }
 
     @PostMapping("/checkans") // http://localhost:8080/checkans 

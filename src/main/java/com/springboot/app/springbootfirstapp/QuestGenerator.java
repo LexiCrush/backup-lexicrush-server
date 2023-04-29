@@ -213,14 +213,4 @@ public class QuestGenerator {
         return null;
     }
 
-
-    public static void main(String[] args) throws Exception {
-        String getq = QuestGenerator.getRandomQuestion();
-        System.out.println(getq);
-        String answer = "apple";
-        int score = QuestGenerator.checkAnswer(getq, answer);
-        System.out.println(score);
-        String botAnswer = QuestGenerator.botAnswer(getq);
-        System.out.println(botAnswer);
-    }
 }
