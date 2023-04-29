@@ -46,16 +46,15 @@ public class QuestionUtil {
         throw new IllegalArgumentException("Invalid question.");
     }
 
-
     public static String randQuestType() {
-        int num = (int) (Math.random() * 3);
-        if (num == 0) {
+        int num = (int) (Math.random() * 6);
+        if (num == 0 || num == 1 || num == 2) {
             return QUEST_TYPE_BEGIN;
         }
-        if (num == 1) {
+        if (num == 3 || num == 4) {
             return QUEST_TYPE_END;
         }
-        if (num == 2) {
+        if (num == 5) {
             return QUEST_TYPE_ANY;
         }
         throw new Error();

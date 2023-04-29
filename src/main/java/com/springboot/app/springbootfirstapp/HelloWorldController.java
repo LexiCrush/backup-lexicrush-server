@@ -17,9 +17,9 @@ public class HelloWorldController {
     
     @GetMapping("/getq")
     public String randq() throws Exception {
-        String q = QuestGenerator.getRandomQuestion();
-        System.out.println("GET Question: " + q);
-        return q;
+        String question = QuestGenerator.getRandomQuestion();
+        System.out.println("GET Question: " + question);
+        return question;
     }
 
     @GetMapping("/bot")
@@ -39,4 +39,5 @@ public class HelloWorldController {
         System.out.println("POST Result: " + QuestGenerator.checkAnswer(question, answer));
         return QuestGenerator.checkAnswer(question, answer);
     }
+    
 }

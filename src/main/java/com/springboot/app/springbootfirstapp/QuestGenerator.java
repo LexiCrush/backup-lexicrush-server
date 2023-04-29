@@ -74,9 +74,9 @@ public class QuestGenerator {
     }
 
     public static String getRandomQuestion() throws Exception {
-
-        String randQuestType = QuestionUtil.randQuestType();
+        
         String randTable = getRandomTable();
+        String randQuestType = QuestionUtil.randQuestType();
         String noun = tables.get(randTable);
 
         String letter = null;
