@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 
 @RequestMapping("/api")
-public class HelloWorldController {
+public class QuestionAnswerController {
     
     @GetMapping("/getq")
     public String randq( ) throws Exception {
