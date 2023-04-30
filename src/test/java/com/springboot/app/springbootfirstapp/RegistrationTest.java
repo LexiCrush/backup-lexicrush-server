@@ -1,6 +1,9 @@
 package com.springboot.app.springbootfirstapp;
 
 import org.junit.jupiter.api.Test;
+
+import com.springboot.app.springbootfirstapp.users.UserService;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegistrationTest {

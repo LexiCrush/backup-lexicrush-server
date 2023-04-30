@@ -16,8 +16,7 @@ public class DBUtil {
     public static Connection getAuthConnection() throws Exception {
 
         Class.forName("org.sqlite.JDBC");
-        String url = "jdbc:sqlite:src/main/resources/login.sqlite";
+        String url = "jdbc:sqlite:src/main/resources/UserStorage.sqlite";
         return  DriverManager.getConnection(url);
-        
     }
 }
