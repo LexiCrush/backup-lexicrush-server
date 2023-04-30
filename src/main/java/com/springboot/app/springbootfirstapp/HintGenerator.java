@@ -37,7 +37,8 @@ public class HintGenerator {
             for (String word : words) {
                 hint += formatHint(word, 2) + " ";
             }
-            return hint;
+            String final_hint = hint;
+            return final_hint.trim();
         }
 
         if (questType.equals(QuestionUtil.QUEST_TYPE_BEGIN)) {
@@ -48,8 +49,8 @@ public class HintGenerator {
                 hint += formatHint(word, 2) + " ";
             }
             // add the first char from the possibleAnswer and tempStr
-            String final_hint = possibleAnswer.charAt(0) + hint; 
-            return final_hint;
+            String final_hint = possibleAnswer.charAt(0) + hint;
+            return final_hint.trim();
         }
 
         if (questType.equals(QuestionUtil.QUEST_TYPE_END)) {
@@ -63,25 +64,12 @@ public class HintGenerator {
             if (hint.charAt(hint.length() - 1) == ' ') {
                 hint = hint.substring(0, hint.length() - 1);
             }
-
-            String final_hint = hint + possibleAnswer.charAt(possibleAnswer.length() - 1); 
-            return final_hint;
+            String final_hint = hint + possibleAnswer.charAt(possibleAnswer.length() - 1);
+            return final_hint.trim();
         }
+
         return null;
     }
-
-    public static void main(String[] args) throws Exception {
-        String question = "Name a country in the world that ends with the letter a";
-        String hint = makeHint(question);
-        System.out.println(hint + "\n");
-        String question2 = "Name a country in the world that starts with the letter a";
-        String hint2 = makeHint(question2);
-        System.out.println(hint2 + "\n");
-        String question3 = "Name an element";
-        String hint3 = makeHint(question3);
-        System.out.println(hint3 + "\n");
-    }
-
 }
 
 
