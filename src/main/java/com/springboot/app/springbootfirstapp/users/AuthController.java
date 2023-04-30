@@ -1,4 +1,4 @@
-package com.springboot.app.springbootfirstapp;
+package com.springboot.app.springbootfirstapp.users;
 
 import org.python.icu.impl.duration.TimeUnit;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
     
-    @PostMapping("/create") // http://localhost:8080/auth/create
+    @PostMapping("/register") // http://localhost:8080/auth/register
     public String create(@RequestParam String username, @RequestParam String password) throws Exception {
        
         try {
