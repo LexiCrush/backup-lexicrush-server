@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 
 @RequestMapping("/api")
-public class QuestionAnswerController {
+public class CoreLogicController {
     
     @GetMapping("/getq")
     public String randq( ) throws Exception {
@@ -36,14 +36,14 @@ public class QuestionAnswerController {
         System.out.println("Hint: " + hint); // TODO remove
         return hint;
     }
-
+    
     @PostMapping("/results")
-    public String results(@RequestHeader("Access-Token") String accessToken) {
+    public String results(@RequestHeader("Access-Token") String accessToken, @RequestParam int Score) throws Exception {
 
         if (accessToken == null) {
             return "Unauthorized";
         } else {
-            
+        
             String[] parts = accessToken.split("\\|");
             String username = parts[0];
             long expiredAt = Long.parseLong(parts[1]);

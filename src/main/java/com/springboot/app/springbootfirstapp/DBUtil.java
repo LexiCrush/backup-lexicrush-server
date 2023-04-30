@@ -18,4 +18,11 @@ public class DBUtil {
         String url = "jdbc:sqlite:src/main/resources/UserStorage.sqlite";
         return  DriverManager.getConnection(url);
     }
+
+    public static Connection getScoreConnection() throws Exception {
+
+        Class.forName("org.sqlite.JDBC");
+        String url = "jdbc:sqlite:src/main/resources/ScoreStorage.sqlite";
+        return  DriverManager.getConnection(url);
+    }
 }
