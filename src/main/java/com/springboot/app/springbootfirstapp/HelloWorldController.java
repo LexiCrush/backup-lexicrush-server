@@ -1,8 +1,10 @@
 package com.springboot.app.springbootfirstapp;
 
+import org.apache.catalina.authenticator.SpnegoAuthenticator.AcceptAction;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 // import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloWorldController {
     
     @GetMapping("/getq")
-    public String randq() throws Exception {
+    public String randq( ) throws Exception {
+
         String question = QuestGenerator.getRandomQuestion();
         System.out.println("GET Question: " + question);
         return question;
@@ -39,6 +42,28 @@ public class HelloWorldController {
         String hint = HintGenerator.makeHint(question);
         System.out.println("hint: " + hint);
         return hint;
+    }
+
+    @PostMapping("/results")
+    public String results(@RequestHeader("Access-Token") String accessToken) {
+
+        if (accessToken == null) {
+            return "Unauthorized";
+        } else {
+            String[] parts = accessToken.split("\\|");
+            String username = parts[0];
+            long expiredAt = Long.parseLong(parts[1]);
+
+            if (expiredAt < System.currentTimeMillis()) {
+                return "Session Expired";
+            } else {
+
+                 // Good to go. The accesstoken is still active
+
+                 return "Authenticated User: " + username;
+
+            }
+        }
     }
 
     @PostMapping("/checkans") // http://localhost:8080/checkans 
