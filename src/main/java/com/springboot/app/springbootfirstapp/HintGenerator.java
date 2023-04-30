@@ -22,16 +22,12 @@ public class HintGenerator {
     }
 
     public static String makeHint(String question) throws Exception {
-        // parseQuestion
-        String[] parsedQuestion = QuestionUtil.parseQuestion(question);
+
+        String[] parsedQuestion = QuestionUtil.parseQuestion(question); // parseQuestion
         String questType = parsedQuestion[0];
-
         String possibleAnswer = QuestGenerator.botAnswer(question);
-        possibleAnswer = possibleAnswer.toLowerCase(Locale.ENGLISH);
-        System.out.println("possibleAnswer: " + possibleAnswer);
-
-        // if the question type is any, apply the formatHint method
-        if (questType.equals(QuestionUtil.QUEST_TYPE_ANY)) {
+        possibleAnswer = possibleAnswer.toLowerCase(Locale.ENGLISH); 
+        if (questType.equals(QuestionUtil.QUEST_TYPE_ANY)) { // if the question type is any, apply the formatHint method
             String hint = "";
             String[] words = possibleAnswer.split(" ");
             for (String word : words) {

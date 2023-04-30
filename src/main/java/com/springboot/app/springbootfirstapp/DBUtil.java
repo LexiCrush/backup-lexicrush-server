@@ -10,7 +10,6 @@ public class DBUtil {
         Class.forName("org.sqlite.JDBC");
         String url = "jdbc:sqlite:src/main/resources/NounBankSQLite.db";
         return  DriverManager.getConnection(url);
-        
     }
 
     public static Connection getAuthConnection() throws Exception {

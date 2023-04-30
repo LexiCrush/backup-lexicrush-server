@@ -47,19 +47,20 @@ public class QuestionUtil {
     }
 
     public static String randQuestType() {
-        int num = (int) (Math.random() * 6);
-        if (num == 0 || num == 1 || num == 2) {
-            return QUEST_TYPE_BEGIN;
-        }
-        if (num == 3 || num == 4) {
-            return QUEST_TYPE_END;
-        }
-        if (num == 5) {
+        int randIndex = (int) (Math.random() * 6);
+        System.out.println(randIndex);
+        // difficulty weighting
+        if (randIndex < 3) { 
             return QUEST_TYPE_ANY;
         }
-        throw new Error();
+        if (randIndex == 3 || randIndex == 4) {
+            return QUEST_TYPE_BEGIN;
+        }
+        return QUEST_TYPE_END;
     }
+    
 
     public static void main(String[] args) {
+        System.out.println(QuestionUtil.randQuestType());
     }
 }
