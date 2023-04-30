@@ -58,8 +58,6 @@ public class HelloWorldController {
                 return "Session Expired";
             } else {
 
-                 // Good to go. The accesstoken is still active
-
                  return "Authenticated User: " + username;
 
             }

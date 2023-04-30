@@ -3,6 +3,7 @@ package com.springboot.app.springbootfirstapp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserService {
     
@@ -19,7 +20,7 @@ public class UserService {
         }
     }
 
-    public static  boolean validateUser(String username, String password) throws Exception {
+    public static boolean validateUser(String username, String password) throws Exception {
        
 
         try (Connection conn = DBUtil.getAuthConnection()) {
@@ -49,4 +50,18 @@ public class UserService {
         }
         
     }
+
+    public static void removeUser(String username) throws Exception {
+        try (Connection conn = DBUtil.getAuthConnection()) {
+            String query = "DELETE FROM User WHERE username=?";
+    
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, username);
+                stmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
