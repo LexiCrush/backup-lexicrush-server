@@ -3,10 +3,9 @@ package com.springboot.app.springbootfirstapp;
 import org.junit.jupiter.api.Test;
 
 import com.springboot.app.springbootfirstapp.users.UserService;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RegistrationTest {
+public class LoginRegistrationTest {
     @Test // adding and removing a user
     public void testRegistration() throws Exception {
         String username = "tempUser";
@@ -26,5 +25,15 @@ public class RegistrationTest {
         UserService.removeUser(username);
         assertEquals(false, UserService.validateUser(username, password));
     }
-    
+
+    @Test // ensure user is a valid user (used in score service)
+    public void testUserExists() throws Exception {
+        String username = "Hacker";
+        String password = "HackersPassword";
+        UserService.insertUser(username, password);
+        assertEquals(true, UserService.userExists(username));
+        UserService.removeUser(username);
+        assertEquals(false, UserService.userExists(username));
+    }
+
 }

@@ -1,10 +1,9 @@
 package com.springboot.app.springbootfirstapp;
+
 import java.util.Locale;
 import java.util.Random;
 
-
 public class HintGenerator {
-
 
     public static String formatHint(String input, int n) {
         // start with a string of len(input) underscores
@@ -26,7 +25,7 @@ public class HintGenerator {
         String[] parsedQuestion = QuestionUtil.parseQuestion(question); // parseQuestion
         String questType = parsedQuestion[0];
         String possibleAnswer = QuestGenerator.botAnswer(question);
-        possibleAnswer = possibleAnswer.toLowerCase(Locale.ENGLISH); 
+        possibleAnswer = possibleAnswer.toLowerCase(Locale.ENGLISH);
         if (questType.equals(QuestionUtil.QUEST_TYPE_ANY)) { // if the question type is any, apply the formatHint method
             String hint = "";
             String[] words = possibleAnswer.split(" ");
@@ -67,5 +66,3 @@ public class HintGenerator {
         return null;
     }
 }
-
-
