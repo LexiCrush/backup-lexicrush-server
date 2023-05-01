@@ -1,9 +1,11 @@
-package com.springboot.app.springbootfirstapp.users;
+package com.springboot.app.springbootfirstapp.user;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.python.bouncycastle.jcajce.provider.asymmetric.ec.SignatureSpi.ecCVCDSA;
 
 import com.springboot.app.springbootfirstapp.DBUtil;
 
@@ -37,7 +39,8 @@ public class UserService {
 
                         String dbPassword = rs.getString(1);
 
-                        System.out.println("dbPassword: " + dbPassword);
+                        System.out.println("Stored dbPassword: " + dbPassword);
+                        System.out.println("Provided Password: " + password);
                         return dbPassword.equals(password);
                     } else {
 
@@ -51,6 +54,31 @@ public class UserService {
 
     }
 
+    public static String createAccessToken(String username) throws Exception {
+
+        long expiredAt = System.currentTimeMillis() + 1000 * 60 * 60 * 2;
+        // user1|1234567890
+        return username + "|" + expiredAt;
+    }
+
+    public static String parseAccessToken(String accessToken) throws Exception {
+
+        String[] parts = accessToken.split("\\|");
+
+        if (parts.length != 2) {
+            return null;
+        }
+
+        String username = parts[0];
+        long expiredAt = Long.parseLong(parts[1]);
+
+        if (expiredAt < System.currentTimeMillis()) {
+            return null;
+        }
+
+        return username;
+    }
+
     public static boolean userExists(String username) throws Exception {
         try (Connection conn = DBUtil.getAuthConnection()) {
 
@@ -58,14 +86,8 @@ public class UserService {
 
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, username);
-
                 try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-
+                    return rs.next();
                 }
             }
         }
