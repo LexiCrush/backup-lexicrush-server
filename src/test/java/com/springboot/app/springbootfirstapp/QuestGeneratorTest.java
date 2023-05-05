@@ -16,8 +16,8 @@ public class QuestGeneratorTest {
     }
 
     @Test
-    // check question parser works for "starts with mode" 
-    public void checkAnswer_validAnswer_returnsCorrectScor_StartsWithMode() throws Exception {
+    // check question parser works for "starts with mode"
+    public void checkAnswer_validAnswer_returnsCorrectScor_startsWithMode() throws Exception {
         String question = "Name A State in the USA That Starts With The Letter H";
         String answer = "Hawaii";
         int expectedScore = 6;
@@ -25,9 +25,30 @@ public class QuestGeneratorTest {
         assertEquals(expectedScore, score);
     }
 
+    // SOFT SCORING TESTS
+    @Test
+    // check question parser excludes spaces from answer score
+    public void checkAnswer_validAnswer_returnsCorrectScore_trimmed() throws Exception {
+        String question = "Name A State in the USA That Starts With The Letter N";
+        String answer = " New Hampshire";
+        int expectedScore = 12;
+        int score = QuestGenerator.checkAnswer(question, answer);
+        assertEquals(expectedScore, score);
+    }
+
+    @Test
+    // check question parser excludes spaces from answer score
+    public void checkAnswer_validAnswer_returnsCorrectScore_sandwichedSpaces() throws Exception {
+        String question = "Name A State in the USA That Starts With The Letter N";
+        String answer = "Newhampshire";
+        int expectedScore = 12;
+        int score = QuestGenerator.checkAnswer(question, answer);
+        assertEquals(expectedScore, score);
+    }
+
     @Test
     // check question parser works for "ends with mode"
-    public void checkAnswer_validAnswer_returnsCorrectScore_EndsWithMode() throws Exception {
+    public void checkAnswer_validAnswer_returnsCorrectScore_endsWithMode() throws Exception {
         String question = "Name A Word in the English Language That Ends With The Letter Y";
         String answer = "Concurrency";
         int expectedScore = 11;
@@ -53,10 +74,9 @@ public class QuestGeneratorTest {
         assertEquals(3, parsedQuestion.length); // question parser should return 3 elements
         String questionType = parsedQuestion[0];
         // check that the question type is valid
-        assertEquals(true, questionType.equals(QuestionUtil.QUEST_TYPE_BEGIN) || questionType.equals(QuestionUtil.QUEST_TYPE_END) || questionType.equals(QuestionUtil.QUEST_TYPE_ANY));
+        assertEquals(true,
+                questionType.equals(QuestionUtil.QUEST_TYPE_BEGIN) || questionType.equals(QuestionUtil.QUEST_TYPE_END)
+                        || questionType.equals(QuestionUtil.QUEST_TYPE_ANY));
     }
-
-
-
 
 }

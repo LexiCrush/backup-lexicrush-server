@@ -20,14 +20,14 @@ public class BotFeatureTest {
         String botResponse = QuestGenerator.botAnswer(question);
 
         List<String> countries = new ArrayList<String>();
-            countries.add("germany"); 
-            countries.add("hungary");
-            countries.add("italy");
-            countries.add("norway");
-            countries.add("paraguay");
-            countries.add("turkey"); 
-            countries.add("uruguay"); 
-            countries.add("vatican city");
+        countries.add("germany");
+        countries.add("hungary");
+        countries.add("italy");
+        countries.add("norway");
+        countries.add("paraguay");
+        countries.add("turkey");
+        countries.add("uruguay");
+        countries.add("vatican city");
 
         // assert that bot's response is one of the countries in the list
         assertEquals(true, countries.contains(botResponse));

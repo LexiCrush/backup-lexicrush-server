@@ -13,14 +13,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class QuestGenerator {
-    
+
     private static final Map<String, String> tables;
     private static final Map<String, String> nounToTables;
-    
+
     static {
 
-        Map<String, String> nounsMap = new HashMap<>();
-
+        Map<String, String> nounsMap = new HashMap<>(); // key: table name, value: noun phrase.
+                                                        // sqlite table name to human readable string conversion
         nounsMap.put("all_usa_states", "A State in the USA");
         nounsMap.put("many_english_words", "A Word in the English Language");
         nounsMap.put("all_world_countries", "A Country in the World");
@@ -48,33 +48,34 @@ public class QuestGenerator {
         nounsMap.put("many_youtubers", "A Youtuber");
 
         tables = Collections.unmodifiableMap(nounsMap);
-        nounToTables = nounsMap.entrySet().stream().collect(Collectors.toMap(e -> e.getValue().toLowerCase(), Map.Entry::getKey));
+        nounToTables = nounsMap.entrySet().stream()
+                .collect(Collectors.toMap(e -> e.getValue().toLowerCase(), Map.Entry::getKey));
 
     }
 
     public static String getRandomTable() throws Exception {
-        
+
         String sql = "SELECT name FROM sqlite_master WHERE type='table'";
 
         try (Connection conn = DBUtil.getConnection()) {
             try (Statement stmt = conn.createStatement()) {
                 try (ResultSet rs = stmt.executeQuery(sql)) {
-                    
-                    List<String> tables = new ArrayList<>();    
+
+                    List<String> tables = new ArrayList<>();
                     while (rs.next()) {
                         tables.add(rs.getString("name"));
                     }
 
-                    int randomIdx = (int) (Math.random() * tables.size()); 
-                    return  tables.get(randomIdx);
+                    int randomIdx = (int) (Math.random() * tables.size());
+                    return tables.get(randomIdx);
                 }
-                
-            }                
+
+            }
         }
     }
 
     public static String getRandomQuestion() throws Exception {
-        
+
         String randTable = getRandomTable();
         String randQuestType = QuestionUtil.randQuestType();
         String noun = tables.get(randTable);
@@ -82,20 +83,21 @@ public class QuestGenerator {
         String letter = null;
 
         if (!randQuestType.equals(QuestionUtil.QUEST_TYPE_ANY)) {
-            
+
             try (Connection conn = DBUtil.getConnection()) {
                 try (Statement stmt = conn.createStatement()) {
                     try (ResultSet rs = stmt.executeQuery("SELECT " + randTable + " FROM " + randTable)) {
-                        
+
                         List<String> words = new ArrayList<>();
                         while (rs.next()) {
                             words.add(rs.getString(1));
                         }
 
-                        int randomIdx = (int) (Math.random() * words.size()); 
+                        int randomIdx = (int) (Math.random() * words.size());
                         String randomWord = words.get(randomIdx);
 
-                        letter = randQuestType.equals(QuestionUtil.QUEST_TYPE_BEGIN) ? randomWord.substring(0, 1) : randomWord.substring(randomWord.length() - 1);
+                        letter = randQuestType.equals(QuestionUtil.QUEST_TYPE_BEGIN) ? randomWord.substring(0, 1)
+                                : randomWord.substring(randomWord.length() - 1);
                     }
                 }
             }
@@ -108,46 +110,50 @@ public class QuestGenerator {
 
         question = question.toLowerCase(Locale.ENGLISH);
         answer = answer.toLowerCase(Locale.ENGLISH);
-        String[] parts = QuestionUtil.parseQuestion(question);
+        answer = answer.trim();
+
+
+
+        String[] parts = QuestionUtil.parseQuestion(question); // [0] = quest type ("starts wiht" etc.), [1] = noun, [2] = letter
         String randQuestType = parts[0];
         String noun = parts[1];
         String letter = parts[2];
-            
+
         String tableName = nounToTables.get(noun);
 
-        if (QuestionUtil.QUEST_TYPE_BEGIN.equals(randQuestType)) {
+        if (QuestionUtil.QUEST_TYPE_BEGIN.equals(randQuestType)) { // doesn't start with the correct letter
             if (!answer.startsWith(letter)) {
-               return 0;
-            } 
+                return 0;
+            }
 
-         } else if (QuestionUtil.QUEST_TYPE_END.equals(randQuestType)) {
-             if (!answer.endsWith(letter)) {
-                 return 0;
-             } 
-         }   
-            
+        } else if (QuestionUtil.QUEST_TYPE_END.equals(randQuestType)) { // doesn't end with the correct letter
+            if (!answer.endsWith(letter)) {
+                return 0;
+            }
+        }
+
         try (Connection conn = DBUtil.getConnection()) {
-                
-            String query = "SELECT " + tableName + " FROM " + tableName + " WHERE LOWER(" + tableName + ") = ?"; // prevent SQl injection
-
+            
+            String query = String.format("SELECT %s FROM %s WHERE LOWER(REPLACE(%s, ' ', '')) = ? OR LOWER(%s) = ?", tableName, tableName, tableName, tableName); // ignore sandwiched spaces
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, answer);
+                stmt.setString(2, answer);
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
 
-                        String matchedWord = rs.getString(1);
-                        return matchedWord.length();
-                    }
-                    else {
+                        String matchedWord = rs.getString(1); // TODO: handle multiple matches and implement Levenshtein distance
+                        // return the length of the matched word without counting spaces
+                        return matchedWord.replaceAll("\\s+", "").length();
+                    } else {
                         return 0;
                     }
-                    
+
                 }
             }
-        }        
+        }
     }
-    
+
     public static String botAnswer(String question) throws Exception {
         question = question.toLowerCase(Locale.ENGLISH);
         String[] parts = QuestionUtil.parseQuestion(question);
@@ -156,18 +162,18 @@ public class QuestGenerator {
         String letter = parts[2];
         String tableName = nounToTables.get(noun);
 
-        if (QuestionUtil.QUEST_TYPE_ANY.equals(randQuestType))  {
+        if (QuestionUtil.QUEST_TYPE_ANY.equals(randQuestType)) {
             // return a random word from the table called tableName
             try (Connection conn = DBUtil.getConnection()) {
                 try (Statement stmt = conn.createStatement()) {
                     try (ResultSet rs = stmt.executeQuery("SELECT " + tableName + " FROM " + tableName)) {
-                        
+
                         List<String> words = new ArrayList<>();
                         while (rs.next()) {
-                            words.add(rs.getString(1)); 
+                            words.add(rs.getString(1));
                         }
 
-                        int randomIdx = (int) (Math.random() * words.size()); 
+                        int randomIdx = (int) (Math.random() * words.size());
                         String randomWord = words.get(randomIdx);
                         return randomWord;
                     }
@@ -178,14 +184,16 @@ public class QuestGenerator {
         else if (QuestionUtil.QUEST_TYPE_BEGIN.equals(randQuestType)) {
             try (Connection conn = DBUtil.getConnection()) {
                 try (Statement stmt = conn.createStatement()) {
-                    // does not need to be protected from SQL injection because user input is not used and the letter is a single character
-                    try (ResultSet rs = stmt.executeQuery("SELECT " + tableName + " FROM " + tableName + " WHERE " + tableName + " LIKE '" + letter + "%'")) {
+                    // does not need to be protected from SQL injection because user input is not
+                    // used and the letter is a single character
+                    try (ResultSet rs = stmt.executeQuery("SELECT " + tableName + " FROM " + tableName + " WHERE "
+                            + tableName + " LIKE '" + letter + "%'")) {
                         List<String> words = new ArrayList<>();
                         while (rs.next()) {
-                            words.add(rs.getString(1)); 
+                            words.add(rs.getString(1));
                         }
 
-                        int randomIdx = (int) (Math.random() * words.size()); 
+                        int randomIdx = (int) (Math.random() * words.size());
                         String randomWord = words.get(randomIdx);
                         return randomWord;
                     }
@@ -196,14 +204,15 @@ public class QuestGenerator {
         else if (QuestionUtil.QUEST_TYPE_END.equals(randQuestType)) {
             try (Connection conn = DBUtil.getConnection()) {
                 try (Statement stmt = conn.createStatement()) {
-                    try (ResultSet rs = stmt.executeQuery("SELECT " + tableName + " FROM " + tableName + " WHERE " + tableName + " LIKE '%" + letter + "'")) {
-                        
+                    try (ResultSet rs = stmt.executeQuery("SELECT " + tableName + " FROM " + tableName + " WHERE "
+                            + tableName + " LIKE '%" + letter + "'")) {
+
                         List<String> words = new ArrayList<>();
                         while (rs.next()) {
-                            words.add(rs.getString(1)); 
+                            words.add(rs.getString(1));
                         }
 
-                        int randomIdx = (int) (Math.random() * words.size()); 
+                        int randomIdx = (int) (Math.random() * words.size());
                         String randomWord = words.get(randomIdx);
                         return randomWord;
                     }

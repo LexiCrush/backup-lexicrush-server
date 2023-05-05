@@ -4,25 +4,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DBUtil {
-    
+
     public static Connection getConnection() throws Exception {
 
         Class.forName("org.sqlite.JDBC");
         String url = "jdbc:sqlite:src/main/resources/NounBankSQLite.db";
-        return  DriverManager.getConnection(url);
+        return DriverManager.getConnection(url);
     }
 
     public static Connection getAuthConnection() throws Exception {
 
         Class.forName("org.sqlite.JDBC");
-        String url = "jdbc:sqlite:src/main/resources/UserStorage.sqlite";
-        return  DriverManager.getConnection(url);
-    }
-
-    public static Connection getScoreConnection() throws Exception {
-
-        Class.forName("org.sqlite.JDBC");
-        String url = "jdbc:sqlite:src/main/resources/ScoreStorage.sqlite";
-        return  DriverManager.getConnection(url);
+        String url = "jdbc:sqlite:src/main/resources/UserStorage.db";
+        return DriverManager.getConnection(url);
     }
 }
