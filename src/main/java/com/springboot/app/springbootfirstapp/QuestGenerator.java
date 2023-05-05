@@ -134,7 +134,7 @@ public class QuestGenerator {
 
         try (Connection conn = DBUtil.getConnection()) {
             
-            String query = String.format("SELECT %s FROM %s WHERE LOWER(REPLACE(%s, ' ', '')) = ? OR LOWER(%s) = ?", tableName, tableName, tableName, tableName);
+            String query = String.format("SELECT %s FROM %s WHERE LOWER(REPLACE(%s, ' ', '')) = ? OR LOWER(%s) = ?", tableName, tableName, tableName, tableName); // ignore sandwiched spaces
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, answer);
                 stmt.setString(2, answer);
@@ -142,7 +142,7 @@ public class QuestGenerator {
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
 
-                        String matchedWord = rs.getString(1);
+                        String matchedWord = rs.getString(1); // TODO: handle multiple matches and implement Levenshtein distance
                         // return the length of the matched word without counting spaces
                         return matchedWord.replaceAll("\\s+", "").length();
                     } else {
