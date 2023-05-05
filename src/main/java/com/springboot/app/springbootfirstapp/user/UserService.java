@@ -4,9 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.python.bouncycastle.jcajce.provider.asymmetric.ec.SignatureSpi.ecCVCDSA;
-
 import com.springboot.app.springbootfirstapp.DBUtil;
 
 public class UserService {

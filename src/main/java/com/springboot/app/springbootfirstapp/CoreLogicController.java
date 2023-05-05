@@ -39,9 +39,27 @@ public class CoreLogicController {
         return hint;
     }
 
-    @PostMapping("/score")
+    @GetMapping("/getCurrentScore") // returns the user's score
+    public int getscore(@RequestHeader("Access-Token") String accessToken) throws Exception {
+        String username = UserService.parseAccessToken(accessToken);
+        int score = UserStatService.getScoreByType(username, "current_score");
+        System.out.println("GET Current Score: " + score); // TODO remove
+        return score;
+    }
+
+    @PostMapping("/checkans") // http://localhost:8080/checkans
+    public int checkans(@RequestParam String question, @RequestParam String answer) throws Exception {
+        System.out.println(QuestGenerator.checkAnswer(question, answer)); // TODO remove
+        return QuestGenerator.checkAnswer(question, answer);
+    }
+
+    @PostMapping("/updateCurrentScore")
     public String results(@RequestHeader("Access-Token") String accessToken, @RequestParam String playerAnswer,
             @RequestParam String botAnswer) throws Exception {
+
+        if (playerAnswer == null || botAnswer == null) {
+            return "Invalid answers";
+        }
         if (UserService.parseAccessToken(accessToken) == null) {
             return "Invalid access token";
         } else {
@@ -67,10 +85,22 @@ public class CoreLogicController {
         }
     }
 
-    @PostMapping("/checkans") // http://localhost:8080/checkans
-    public int checkans(@RequestParam String question, @RequestParam String answer) throws Exception {
-        System.out.println(QuestGenerator.checkAnswer(question, answer)); // TODO remove
-        return QuestGenerator.checkAnswer(question, answer);
+    @PostMapping("/endGame")
+    public String endGame(@RequestHeader("Access-Token") String accessToken) throws Exception {
+        if (UserService.parseAccessToken(accessToken) == null) {
+            return "Invalid access token";
+        } else {
+            String username = UserService.parseAccessToken(accessToken);
+            int currentScore = UserStatService.getScoreByType(username, "current_score");
+            int highScore = UserStatService.getScoreByType(username, "high_score");
+            UserStatService.updateScoreByType(username, 0, "current_score");
+            if (currentScore > highScore) {
+                UserStatService.updateScoreByType(username, currentScore, "high_score");
+                return ("Game Over. New high score!" + currentScore);
+            }
+            UserStatService.updateScoreByType(username, 0, "current_score");
+            return "Game Over. Your score was " + currentScore + " and your high score is " + highScore + ".";
+        }
     }
 
 }

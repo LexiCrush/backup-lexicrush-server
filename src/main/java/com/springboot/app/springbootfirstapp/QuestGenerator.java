@@ -19,8 +19,8 @@ public class QuestGenerator {
 
     static {
 
-        Map<String, String> nounsMap = new HashMap<>();
-
+        Map<String, String> nounsMap = new HashMap<>(); // key: table name, value: noun phrase.
+                                                        // sqlite table name to human readable string conversion
         nounsMap.put("all_usa_states", "A State in the USA");
         nounsMap.put("many_english_words", "A Word in the English Language");
         nounsMap.put("all_world_countries", "A Country in the World");
@@ -110,38 +110,41 @@ public class QuestGenerator {
 
         question = question.toLowerCase(Locale.ENGLISH);
         answer = answer.toLowerCase(Locale.ENGLISH);
-        String[] parts = QuestionUtil.parseQuestion(question);
+        answer = answer.trim();
+
+
+
+        String[] parts = QuestionUtil.parseQuestion(question); // [0] = quest type ("starts wiht" etc.), [1] = noun, [2] = letter
         String randQuestType = parts[0];
         String noun = parts[1];
         String letter = parts[2];
 
         String tableName = nounToTables.get(noun);
 
-        if (QuestionUtil.QUEST_TYPE_BEGIN.equals(randQuestType)) {
+        if (QuestionUtil.QUEST_TYPE_BEGIN.equals(randQuestType)) { // doesn't start with the correct letter
             if (!answer.startsWith(letter)) {
                 return 0;
             }
 
-        } else if (QuestionUtil.QUEST_TYPE_END.equals(randQuestType)) {
+        } else if (QuestionUtil.QUEST_TYPE_END.equals(randQuestType)) { // doesn't end with the correct letter
             if (!answer.endsWith(letter)) {
                 return 0;
             }
         }
 
         try (Connection conn = DBUtil.getConnection()) {
-
-            String query = "SELECT " + tableName + " FROM " + tableName + " WHERE LOWER(" + tableName + ") = ?"; // prevent
-                                                                                                                 // SQl
-                                                                                                                 // injection
-
+            
+            String query = String.format("SELECT %s FROM %s WHERE LOWER(REPLACE(%s, ' ', '')) = ? OR LOWER(%s) = ?", tableName, tableName, tableName, tableName);
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, answer);
+                stmt.setString(2, answer);
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
 
                         String matchedWord = rs.getString(1);
-                        return matchedWord.length();
+                        // return the length of the matched word without counting spaces
+                        return matchedWord.replaceAll("\\s+", "").length();
                     } else {
                         return 0;
                     }
