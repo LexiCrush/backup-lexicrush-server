@@ -47,6 +47,9 @@ public class CoreLogicController {
         return score;
     }
 
+    @GetMapping("/getHighScoreBoar") // returns the top high scores in the database
+
+
     @PostMapping("/checkans") // http://localhost:8080/checkans
     public int checkans(@RequestParam String question, @RequestParam String answer) throws Exception {
         System.out.println(QuestGenerator.checkAnswer(question, answer)); // TODO remove
@@ -55,18 +58,29 @@ public class CoreLogicController {
 
     @PostMapping("/updateCurrentScore")
     public String results(@RequestHeader("Access-Token") String accessToken, @RequestParam String playerAnswer,
-            @RequestParam String botAnswer) throws Exception {
+            @RequestParam String botAnswer, @RequestParam String question) throws Exception {
 
-        if (playerAnswer == null || botAnswer == null) {
-            return "Invalid answers";
         }
         if (UserService.parseAccessToken(accessToken) == null) {
-            return "Invalid access token";
+            return "Server Error, sorry for the inconvenience! Please try logging in again or make sure your browsers time is up to date.";
+
         } else {
+
+            if (playerAnswer.equals("")) {
+                return "Please enter an answer... ";
+            }
+
+            int score = QuestGenerator.checkAnswer(question, playerAnswer);
+
+            if (score < 1) {
+                return "Invalid answer. ";
+            }
+
             String username = UserService.parseAccessToken(accessToken);
+
             // compare lengths of playerAnswer and botAnswer in LONGEST MODE
-            int pal = playerAnswer.length();
-            int bal = botAnswer.length();
+            int pal = score; // checkAnswer returns matchedWord.replaceAll("\\s+", "").length(); or 0
+            int bal = botAnswer.replaceAll("\\s+", "").length();
 
             if (pal > bal) {
 
@@ -75,12 +89,12 @@ public class CoreLogicController {
                 int updatedScore = currentScore + balPalDiff;
                 UserStatService.updateScoreByType(username, updatedScore, "current_score");
 
-                return ("You WIN! Your answer was " + balPalDiff + " letters longer than the bot's answer!");
+                return ("You WIN! Your answer was " + balPalDiff + " letters longer than the bot's answer! ");
             } else if (pal < bal) {
                 int balPalDiff = bal - pal;
-                return "You LOSE! The bot's answer was " + balPalDiff + " letters longer than your answer!";
+                return "You LOSE! The bot's answer was " + balPalDiff + " letters longer than your answer! ";
             } else {
-                return "Its a tie... Both answers were" + pal + " letters long!";
+                return "Its a tie... Both answers were" + pal + " letters long! ";
             }
         }
     }
@@ -102,5 +116,6 @@ public class CoreLogicController {
             return "Game Over. Your score was " + currentScore + " and your high score is " + highScore + ".";
         }
     }
+
 
 }
