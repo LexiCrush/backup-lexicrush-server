@@ -60,7 +60,6 @@ public class CoreLogicController {
     public String results(@RequestHeader("Access-Token") String accessToken, @RequestParam String playerAnswer,
             @RequestParam String botAnswer, @RequestParam String question) throws Exception {
 
-        }
         if (UserService.parseAccessToken(accessToken) == null) {
             return "Server Error, sorry for the inconvenience! Please try logging in again or make sure your browsers time is up to date.";
 
