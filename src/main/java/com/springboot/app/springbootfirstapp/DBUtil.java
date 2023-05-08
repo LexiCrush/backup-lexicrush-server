@@ -8,7 +8,7 @@ public class DBUtil {
     public static Connection getConnection() throws Exception {
 
         Class.forName("org.sqlite.JDBC");
-        String url = "jdbc:sqlite:src/main/resources/NounBankSQLite.db";
+        String url = "jdbc:sqlite:src/main/resources/NounBankSQlite.db";
         return DriverManager.getConnection(url);
     }
 
