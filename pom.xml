@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.springboot.app</groupId>
-	<artifactId>springboot-first-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>springboot-first-app</name>
-	<description>Demo project for Spring Boot</description>
+	<artifactId>lexicrush-server</artifactId>
+	<version>0.0.1-STABLE</version>
+	<name>lexicrush-server</name>
+	<description>Server for Lexicrush</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
