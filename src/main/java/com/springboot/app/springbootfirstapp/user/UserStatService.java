@@ -10,8 +10,12 @@ public class UserStatService {
 
     public static int getScoreByType(String username, String scoretype) throws Exception {
 
-        // score type can only be current_score, high_score
-        if (!scoretype.equals("current_score") && !scoretype.equals("high_score") && !scoretype.equals("available_hints") && !scoretype.equals("coins")) {
+        // valid types
+        Boolean validType = (!scoretype.equals("current_score") && !scoretype.equals("high_score")
+                && !scoretype.equals("available_hints") && !scoretype.equals("coins")
+                && !scoretype.equals("games_played"));
+
+        if (validType) {
             throw new Exception("Invalid score type");
         }
 
@@ -32,8 +36,11 @@ public class UserStatService {
     }
 
     public static void updateScoreByType(String username, int score, String scoretype) throws Exception {
-        // score type can only be current_score, high_score
-        if (!scoretype.equals("current_score") && !scoretype.equals("high_score") && !scoretype.equals("available_hints") && !scoretype.equals("coins")) {
+        Boolean validType = (!scoretype.equals("current_score") && !scoretype.equals("high_score")
+                && !scoretype.equals("available_hints") && !scoretype.equals("coins")
+                && !scoretype.equals("games_played"));
+
+        if (validType) {
             throw new Exception("Invalid score type");
         }
 

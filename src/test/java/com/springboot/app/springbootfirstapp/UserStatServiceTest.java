@@ -12,7 +12,6 @@ public class UserStatServiceTest {
     public void testCurrentAndHighScore() throws Exception {
 
         UserService.removeUser("bestlexicrusher");
-
         UserService.insertUser("bestlexicrusher", "imthebest123");
 
         assertEquals(0, UserStatService.getScoreByType("bestlexicrusher", "current_score"));
@@ -33,7 +32,7 @@ public class UserStatServiceTest {
         UserService.removeUser("hintfiend");
 
         UserService.insertUser("hintfiend", "ineedahint123");
-        assertEquals(0, UserStatService.getAvailableHints("hintfiend"));
+        assertEquals(3, UserStatService.getAvailableHints("hintfiend")); // starts with 3 hints
         assertEquals(0, UserStatService.getGamesPlayed("hintfiend"));
         assertEquals(0, UserStatService.getGamesWon("hintfiend"));
 

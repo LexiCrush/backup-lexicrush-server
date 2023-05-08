@@ -32,8 +32,16 @@ public class CoreLogicController {
         return botAnswer;
     }
 
-    @GetMapping("/useHint") // returns a hint itself
-    public String hint(@RequestParam String question) throws Exception {
+    @GetMapping("/useHint") // returns a hint as a string
+    public String hint(@RequestParam String question, @RequestHeader("Access-Token") String accessToken)
+            throws Exception {
+        String username = UserService.parseAccessToken(accessToken); // subtract hint from user's hint count
+        int hintCount = UserStatService.getScoreByType(username, "available_hints"); // get hint countß
+        if (hintCount <= 0) { // check if hint count is greater than 0
+            return "You have no hints left!";
+        }
+        UserStatService.updateScoreByType(username, hintCount - 1, "available_hints"); // decrement hint count
+        // generate hint
         String hint = HintGenerator.makeHint(question);
         System.out.println("Hint: " + hint); // TODO remove
         return hint;
@@ -69,6 +77,14 @@ public class CoreLogicController {
         int score = UserStatService.getScoreByType(username, "high_score");
         System.out.println("GET High Score: " + score); // TODO remove
         return score;
+    }
+
+    @GetMapping("/getNumGames") // returns the number of games played
+    public int numGamesPlayed(@RequestHeader("Access-Token") String accessToken) throws Exception {
+        String username = UserService.parseAccessToken(accessToken);
+        int numGamesPlayed = UserStatService.getScoreByType(username, "games_played");
+        System.out.println("GET Number of Games Played: " + numGamesPlayed); // TODO remove
+        return numGamesPlayed;
     }
 
     @GetMapping("/getHighScoreLeaderboard") // returns the high score leaderboard as a 2d array

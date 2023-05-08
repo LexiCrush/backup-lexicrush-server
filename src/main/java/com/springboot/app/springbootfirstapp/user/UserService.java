@@ -12,7 +12,7 @@ public class UserService {
 
         try (Connection conn = DBUtil.getAuthConnection()) {
 
-            String query = "INSERT INTO players (username, password) VALUES (?, ?)";
+            String query = "INSERT INTO players (username, password, available_hints) VALUES (?, ?, 3)";
 
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, username);
