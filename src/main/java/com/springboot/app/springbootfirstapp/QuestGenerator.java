@@ -21,31 +21,18 @@ public class QuestGenerator {
 
         Map<String, String> nounsMap = new HashMap<>(); // key: table name, value: noun phrase.
                                                         // sqlite table name to human readable string conversion
-        nounsMap.put("all_usa_states", "A State in the USA");
+        nounsMap.put("many_capitals", "A Capital City");
+        nounsMap.put("many_us_presidents", "A US President");
         nounsMap.put("many_english_words", "A Word in the English Language");
+        nounsMap.put("all_usa_states", "A State in the USA");
         nounsMap.put("all_world_countries", "A Country in the World");
         nounsMap.put("all_elements", "An Element");
-        nounsMap.put("many_animals", "An Animal");
-        nounsMap.put("many_greek_gods", "A Greek God");
-        nounsMap.put("many_roman_gods", "A Roman God");
+        nounsMap.put("many_car_manufacturers", "A Car Manufacturer");
         nounsMap.put("many_cosmetic_items", "A Cosmetic Item");
-        nounsMap.put("many_office_supplies", "An Office Supply");
-        nounsMap.put("many_olympic_sports", "An Olympic Sport");
-        nounsMap.put("many_nfl_teams", "An NFL Team");
-        nounsMap.put("many_marvel", "A Marvel Character");
-        nounsMap.put("many_mythical_creatures", "A Mythical Creature");
-        nounsMap.put("many_weather_conditions", "A Weather Condition");
-        nounsMap.put("many_vegetables", "A Vegetable");
-        nounsMap.put("many_professions", "A Profession");
-        nounsMap.put("many_pets", "A Pet");
-        nounsMap.put("many_landmarks", "A Landmark");
-        nounsMap.put("many_luxury_brands", "A Luxury Brand");
-        nounsMap.put("many_holidays", "A Holiday");
-        nounsMap.put("many_gemstones", "A Gemstone");
         nounsMap.put("many_fruits", "A Fruit");
-        nounsMap.put("many_flowers_plants", "A Flower or Plant");
-        nounsMap.put("many_empires", "An Empire");
-        nounsMap.put("many_youtubers", "A Youtuber");
+        nounsMap.put("many_luxury_brands", "A Luxury Brand");
+        nounsMap.put("many_olympic_sports", "An Olympic Sport");
+        nounsMap.put("many_greek_gods", "A Greek God");
 
         tables = Collections.unmodifiableMap(nounsMap);
         nounToTables = nounsMap.entrySet().stream()
@@ -113,9 +100,8 @@ public class QuestGenerator {
         answer = answer.toLowerCase(Locale.ENGLISH);
         answer = answer.trim();
 
-
-
-        String[] parts = QuestionUtil.parseQuestion(question); // [0] = quest type ("starts wiht" etc.), [1] = noun, [2] = letter
+        String[] parts = QuestionUtil.parseQuestion(question); // [0] = quest type ("starts wiht" etc.), [1] = noun, [2]
+                                                               // = letter
         String randQuestType = parts[0];
         String noun = parts[1];
         String letter = parts[2];
@@ -134,8 +120,9 @@ public class QuestGenerator {
         }
 
         try (Connection conn = DBUtil.getConnection()) {
-            
-            String query = String.format("SELECT %s FROM %s WHERE LOWER(REPLACE(%s, ' ', '')) = ? OR LOWER(%s) = ?", tableName, tableName, tableName, tableName); // ignore sandwiched spaces
+
+            String query = String.format("SELECT %s FROM %s WHERE LOWER(REPLACE(%s, ' ', '')) = ? OR LOWER(%s) = ?",
+                    tableName, tableName, tableName, tableName); // ignore sandwiched spaces
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, answer);
                 stmt.setString(2, answer);
@@ -143,7 +130,8 @@ public class QuestGenerator {
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
 
-                        String matchedWord = rs.getString(1); // TODO: handle multiple matches and implement Levenshtein distance
+                        String matchedWord = rs.getString(1); // TODO: handle multiple matches and implement Levenshtein
+                                                              // distance
                         // return the length of the matched word without counting spaces
                         return matchedWord.replaceAll("\\s+", "").length();
                     } else {
