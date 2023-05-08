@@ -30,7 +30,7 @@ public class HintGenerator {
             String hint = "";
             String[] words = possibleAnswer.split(" ");
             for (String word : words) {
-                hint += formatHint(word, 2) + " ";
+                hint += formatHint(word, 10) + " ";
             }
             String final_hint = hint;
             return final_hint.trim();
@@ -41,7 +41,7 @@ public class HintGenerator {
             String[] words = tempStr.split(" ");
             String hint = "";
             for (String word : words) {
-                hint += formatHint(word, 2) + " ";
+                hint += formatHint(word, 10) + " ";
             }
             // add the first char from the possibleAnswer and tempStr
             String final_hint = possibleAnswer.charAt(0) + hint;
@@ -53,7 +53,7 @@ public class HintGenerator {
             String[] words = tempStr.split(" ");
             String hint = "";
             for (String word : words) {
-                hint += formatHint(word, 2) + " ";
+                hint += formatHint(word, 10) + " ";
             }
             // if hint has a space at the end, remove it
             if (hint.charAt(hint.length() - 1) == ' ') {

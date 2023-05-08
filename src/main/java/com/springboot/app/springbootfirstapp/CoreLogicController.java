@@ -44,6 +44,8 @@ public class CoreLogicController {
         // generate hint
         String hint = HintGenerator.makeHint(question);
         System.out.println("Hint: " + hint); // TODO remove
+        // add a space between each character
+        hint = hint.replaceAll(".", "$0 ");
         return hint;
     }
 
