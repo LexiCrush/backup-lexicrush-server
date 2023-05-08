@@ -2,7 +2,6 @@ package com.springboot.app.springbootfirstapp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 
 import com.springboot.app.springbootfirstapp.user.UserService;
 import com.springboot.app.springbootfirstapp.user.UserStatService;
@@ -34,20 +33,17 @@ public class UserStatServiceTest {
         UserService.removeUser("hintfiend");
 
         UserService.insertUser("hintfiend", "ineedahint123");
-        assertEquals(0, UserStatService.getAvailibleHints("hintfiend"));
+        assertEquals(0, UserStatService.getAvailableHints("hintfiend"));
         assertEquals(0, UserStatService.getGamesPlayed("hintfiend"));
         assertEquals(0, UserStatService.getGamesWon("hintfiend"));
-        assertEquals(0, UserStatService.getGamesLost("hintfiend"));
 
-        UserStatService.updateAvailibleHints("hintfiend", 5);
+        UserStatService.updateAvailableHints("hintfiend", 5);
         UserStatService.updateGamesPlayed("hintfiend", 10);
         UserStatService.updateGamesWon("hintfiend", 5);
-        UserStatService.updateGamesLost("hintfiend", 5);
 
-        assertEquals(5, UserStatService.getAvailibleHints("hintfiend"));
+        assertEquals(5, UserStatService.getAvailableHints("hintfiend"));
         assertEquals(10, UserStatService.getGamesPlayed("hintfiend"));
         assertEquals(5, UserStatService.getGamesWon("hintfiend"));
-        assertEquals(5, UserStatService.getGamesLost("hintfiend"));
 
         UserService.removeUser("hintfiend");
 

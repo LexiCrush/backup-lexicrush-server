@@ -18,32 +18,40 @@ import com.springboot.app.springbootfirstapp.user.UserStatService;
 @RequestMapping("/api")
 public class CoreLogicController {
 
-    @GetMapping("/getq")
+    @GetMapping("/getq") // returns a random question
     public String randq() throws Exception {
         String question = QuestGenerator.getRandomQuestion();
         System.out.println("GET Question: " + question); // TODO remove
         return question;
     }
 
-    @GetMapping("/bot") // returns the bot's answer
+    @GetMapping("/bot") // returns the bot's answer to a question
     public String botscore(@RequestParam String question) throws Exception {
         String botAnswer = QuestGenerator.botAnswer(question);
         System.out.println("Bot Answer: " + botAnswer); // TODO remove
         return botAnswer;
     }
 
-    @GetMapping("/hint") // returns a hint
+    @GetMapping("/useHint") // returns a hint itself
     public String hint(@RequestParam String question) throws Exception {
         String hint = HintGenerator.makeHint(question);
         System.out.println("Hint: " + hint); // TODO remove
         return hint;
     }
 
-    @GetMapping("/getHintCount") // returns the user's hint count
+    @GetMapping("/getHintCount") // returns available hint count
     public int getHintCount(@RequestHeader("Access-Token") String accessToken) throws Exception {
         String username = UserService.parseAccessToken(accessToken);
         int hintCount = UserStatService.getScoreByType(username, "available_hints");
         System.out.println("GET Hint Count: " + hintCount); // TODO remove
+        return hintCount;
+    }
+
+    @GetMapping("/getCoinCount") // returns available coins
+    public int getCoinCount(@RequestHeader("Access-Token") String accessToken) throws Exception {
+        String username = UserService.parseAccessToken(accessToken);
+        int hintCount = UserStatService.getScoreByType(username, "coins");
+        System.out.println("GET Coin Count: " + hintCount); // TODO remove
         return hintCount;
     }
 
@@ -63,16 +71,14 @@ public class CoreLogicController {
         return score;
     }
 
-    @GetMapping("/getHighScoreLeaderboard") // returns the high score leaderboard
-    // return an array of usernames and scores
+    @GetMapping("/getHighScoreLeaderboard") // returns the high score leaderboard as a 2d array
     public String[][] getHighScoreLeaderboard() throws Exception {
         String[][] leaderboard = UserStatService.getHighScoreLeaderboard();
         System.out.println("GET High Score Leaderboard: " + leaderboard); // TODO remove
         return leaderboard;
     }
 
-
-    @PostMapping("/checkans") // http://localhost:8080/checkans
+    @PostMapping("/checkans") // returns 0 if the answer is incorrect, and length of matched word if correct
     public int checkans(@RequestParam String question, @RequestParam String answer) throws Exception {
         System.out.println(QuestGenerator.checkAnswer(question, answer)); // TODO remove
         return QuestGenerator.checkAnswer(question, answer);
@@ -84,6 +90,7 @@ public class CoreLogicController {
 
         if (UserService.parseAccessToken(accessToken) == null) {
             return "Server Error, sorry for the inconvenience! Please try logging in again or make sure your browsers time is up to date.";
+            // access token is invalid due to an unforeseen error
 
         } else {
 
@@ -138,5 +145,15 @@ public class CoreLogicController {
         }
     }
 
+    @PostMapping("/buyHint")
+    public void buyHint(@RequestHeader("Access-Token") String accessToken) throws Exception {
+        String username = UserService.parseAccessToken(accessToken);
+        int hintCount = UserStatService.getScoreByType(username, "available_hints");
+        int coins = UserStatService.getScoreByType(username, "coins");
+        if (coins >= 10) {
+            UserStatService.updateScoreByType(username, hintCount + 1, "available_hints");
+            UserStatService.updateScoreByType(username, coins - 10, "coins");
+        }
+    }
 
 }

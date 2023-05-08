@@ -33,7 +33,7 @@ public class UserStatService {
 
     public static void updateScoreByType(String username, int score, String scoretype) throws Exception {
         // score type can only be current_score, high_score
-        if (!scoretype.equals("current_score") && !scoretype.equals("high_score")) {
+        if (!scoretype.equals("current_score") && !scoretype.equals("high_score") && !scoretype.equals("available_hints") && !scoretype.equals("coins")) {
             throw new Exception("Invalid score type");
         }
 
@@ -47,9 +47,9 @@ public class UserStatService {
         }
     }
 
-    public static int getAvailibleHints(String username) throws Exception {
+    public static int getAvailableHints(String username) throws Exception {
         try (Connection conn = DBUtil.getAuthConnection()) {
-            String query = "SELECT availible_hints FROM players WHERE username = ?";
+            String query = "SELECT available_hints FROM players WHERE username = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, username);
                 try (ResultSet rs = stmt.executeQuery()) {
@@ -63,9 +63,9 @@ public class UserStatService {
         }
     }
 
-    public static void updateAvailibleHints(String username, int hints) throws Exception {
+    public static void updateAvailableHints(String username, int hints) throws Exception {
         try (Connection conn = DBUtil.getAuthConnection()) {
-            String query = "UPDATE players SET availible_hints = ? WHERE username = ?";
+            String query = "UPDATE players SET available_hints = ? WHERE username = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, hints);
                 stmt.setString(2, username);
