@@ -11,7 +11,7 @@ public class UserStatService {
     public static int getScoreByType(String username, String scoretype) throws Exception {
 
         // score type can only be current_score, high_score
-        if (!scoretype.equals("current_score") && !scoretype.equals("high_score")) {
+        if (!scoretype.equals("current_score") && !scoretype.equals("high_score") && !scoretype.equals("available_hints") && !scoretype.equals("coins")) {
             throw new Exception("Invalid score type");
         }
 

@@ -39,6 +39,14 @@ public class CoreLogicController {
         return hint;
     }
 
+    @GetMapping("/getHintCount") // returns the user's hint count
+    public int getHintCount(@RequestHeader("Access-Token") String accessToken) throws Exception {
+        String username = UserService.parseAccessToken(accessToken);
+        int hintCount = UserStatService.getScoreByType(username, "available_hints");
+        System.out.println("GET Hint Count: " + hintCount); // TODO remove
+        return hintCount;
+    }
+
     @GetMapping("/getCurrentScore") // returns the user's score
     public int getCurrentScore(@RequestHeader("Access-Token") String accessToken) throws Exception {
         String username = UserService.parseAccessToken(accessToken);

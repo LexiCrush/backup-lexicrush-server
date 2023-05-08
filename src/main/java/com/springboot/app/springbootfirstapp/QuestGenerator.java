@@ -67,8 +67,8 @@ public class QuestGenerator {
                     }
 
                     int randomIdx = (int) (Math.random() * tables.size());
-                    // return tables.get(randomIdx);
-                    return "many_english_words"; // TODO: remove this line
+                    return tables.get(randomIdx);
+                    // return "many_english_words"; // TODO: remove this line
                 }
 
             }
