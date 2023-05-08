@@ -123,10 +123,10 @@ public class CoreLogicController {
             UserStatService.updateScoreByType(username, 0, "current_score");
             if (currentScore > highScore) {
                 UserStatService.updateScoreByType(username, currentScore, "high_score");
-                return ("Game Over. New high score!" + currentScore);
+                return ("New high score: " + currentScore + " points!");
             }
             UserStatService.updateScoreByType(username, 0, "current_score");
-            return "Game Over. Your score was " + currentScore + " and your high score is " + highScore + ".";
+            return "You scored " + currentScore + " points!";
         }
     }
 
