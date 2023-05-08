@@ -155,4 +155,21 @@ public class UserStatService {
         }
     }
 
+    public static String[][] getHighScoreLeaderboard() throws Exception {
+        try (Connection conn = DBUtil.getAuthConnection()) {
+            String query = "SELECT username, high_score FROM players ORDER BY high_score DESC LIMIT 10";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    String[][] leaderboard = new String[10][2];
+                    int i = 0;
+                    while (rs.next()) {
+                        leaderboard[i][0] = rs.getString(1);
+                        leaderboard[i][1] = Integer.toString(rs.getInt(2));
+                        i++;
+                    }
+                    return leaderboard;
+                }
+            }
+        }
+    }
 }

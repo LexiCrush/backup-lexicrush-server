@@ -40,14 +40,28 @@ public class CoreLogicController {
     }
 
     @GetMapping("/getCurrentScore") // returns the user's score
-    public int getscore(@RequestHeader("Access-Token") String accessToken) throws Exception {
+    public int getCurrentScore(@RequestHeader("Access-Token") String accessToken) throws Exception {
         String username = UserService.parseAccessToken(accessToken);
         int score = UserStatService.getScoreByType(username, "current_score");
         System.out.println("GET Current Score: " + score); // TODO remove
         return score;
     }
 
-    @GetMapping("/getHighScoreBoar") // returns the top high scores in the database
+    @GetMapping("/getHighScore") // returns the user's score
+    public int getHighScore(@RequestHeader("Access-Token") String accessToken) throws Exception {
+        String username = UserService.parseAccessToken(accessToken);
+        int score = UserStatService.getScoreByType(username, "high_score");
+        System.out.println("GET High Score: " + score); // TODO remove
+        return score;
+    }
+
+    @GetMapping("/getHighScoreLeaderboard") // returns the high score leaderboard
+    // return an array of usernames and scores
+    public String[][] getHighScoreLeaderboard() throws Exception {
+        String[][] leaderboard = UserStatService.getHighScoreLeaderboard();
+        System.out.println("GET High Score Leaderboard: " + leaderboard); // TODO remove
+        return leaderboard;
+    }
 
 
     @PostMapping("/checkans") // http://localhost:8080/checkans
@@ -93,7 +107,7 @@ public class CoreLogicController {
                 int balPalDiff = bal - pal;
                 return "You LOSE! The bot's answer was " + balPalDiff + " letters longer than your answer! ";
             } else {
-                return "Its a tie... Both answers were" + pal + " letters long! ";
+                return "Its a tie... Both answers were " + pal + " letters long! ";
             }
         }
     }
