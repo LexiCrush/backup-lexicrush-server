@@ -1,5 +1,5 @@
 # backup-lexicrush-server
-Backup source code for the server-side implementation of Lexicrush app. 
+Backup source code for the server-side implementation of Lexicrush app.
 Spring Boot application and is responsible for generating questions, managing user sessions, and providing a REST API for the client-side application.
 
 ## Prerequisites
