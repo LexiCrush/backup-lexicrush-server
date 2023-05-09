@@ -37,7 +37,7 @@ Returns a random question.
 Example Response:
 ```json
 {
-  "question": "What is the capital of France?"
+  "question": "Name a US President Whose Last Name Starts With an H?"
 }
 ```
 
@@ -48,14 +48,14 @@ Returns the bot's answer to a question.
 Example Request:
 ```json
 {
-  "question": "What is the capital of France?"
+  "question": "Name a US President Whose Last Name Starts With an H?"
 }
 ```
 
 Example Response:
 ```json
 {
-  "answer": "Paris"
+  "answer": "Hoover"
 }
 ```
 
@@ -66,15 +66,15 @@ Returns a hint as a string.
 Example Request:
 ```json
 {
-  "question": "What is the capital of France?",
-  "accessToken": "eyJhbGciOiJIUzI1N..."
+  "question": "Name a Capital of a Country in the World That Starts With a P?"
+  "accessToken": "ak2k2 | 101239490..."
 }
 ```
 
 Example Response:
 ```json
 {
-  "hint": "P a r i s"
+  "hint": "P _ r _ s"
 }
 ```
 
@@ -85,14 +85,14 @@ Returns available hint count.
 Example Request:
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzI1N..."
+  "accessToken": "ak2k2 | 101239490..."
 }
 ```
 
 Example Response:
 ```json
 {
-  "hintCount": 1
+  "hintCount": 3
 }
 ```
 
@@ -103,7 +103,7 @@ Returns available coins.
 Example Request:
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzI1N..."
+  "accessToken": "ak2k2 | 101239490..."
 }
 ```
 
@@ -121,7 +121,7 @@ Returns the user's score.
 Example Request:
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzI1N..."
+  "accessToken": "ak2k2 | 101239490..."
 }
 ```
 
@@ -139,7 +139,7 @@ Returns the user's high score.
 Example Request:
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzI1N..."
+  "accessToken": "ak2k2 | 101239490..."
 }
 ```
 
@@ -157,7 +157,7 @@ Returns the number of games played.
 Example Request:
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzI1N..."
+  "accessToken": "ak2k2 | 101239490..."
 }
 ```
 
@@ -212,19 +212,19 @@ Example Request:
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1N...",
-  "playerAnswer": "Paris",
-  "botAnswer": "Paris",
-  "question": "What is the capital of France?"
+    "question": "Name a state in the USA?"
+  "playerAnswer": "New Jersey",
+  "botAnswer": "New York",
 }
 ```
 
 Example Response:
 ```json
 {
-  "message": "It's a tie... Both answers were 5 letters long!"
+  "message": "You Win! Your answers was 2 letters longer then the oponents."
 }
 ```
 
 ### `/api/endGame`
 
-Ends the game and updates the user
+Ends the game and updates the users stats. Sets a new highscore if applicable.
