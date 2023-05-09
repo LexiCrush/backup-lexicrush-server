@@ -229,10 +229,6 @@ Ends the game and updates the users stats. Sets a new highscore if applicable.
 
 # Authentication/User Endpoints
 
-# Endpoints
-
-The following endpoints are used in this application:
-
 ## POST Requests
 
 ### `/auth/register`
