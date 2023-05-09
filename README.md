@@ -190,15 +190,15 @@ Returns 0 if the answer is incorrect, and length of matched word if correct.
 Example Request:
 ```json
 {
-  "question": "What is the capital of France?",
-  "answer": "Paris"
+  "question": "Name a state in the USA?"
+  "answer": "Vermont"
 }
 ```
 
-Example Response:
+Example Response (Longest Word Mode):
 ```json
 {
-  "score": 5
+  "score": 7
 }
 ```
 
@@ -210,7 +210,7 @@ Example Request:
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1N...",
-    "question": "Name a state in the USA?"
+  "question": "Name a state in the USA?"
   "playerAnswer": "New Jersey",
   "botAnswer": "New York",
 }
