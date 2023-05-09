@@ -24,9 +24,7 @@ mvn spring-boot:run
 
 4. Serves on port 8080 by default.
 
-# Endpoints
-
-The following endpoints are used in this application:
+# Game Logic Endpoints
 
 ## GET Requests
 
@@ -228,3 +226,71 @@ Example Response:
 ### `/api/endGame`
 
 Ends the game and updates the users stats. Sets a new highscore if applicable.
+
+# Authentication/User Endpoints
+
+# Endpoints
+
+The following endpoints are used in this application:
+
+## POST Requests
+
+### `/auth/register`
+
+Registers a new user.
+
+Example Request:
+```json
+{
+  "username": "bob",
+  "password": "password123"
+}
+```
+
+Example Response:
+```json
+{
+  "username": "bob"
+}
+```
+
+### `/auth/login`
+
+Logs an existing user in.
+
+Example Request:
+```json
+{
+  "username": "bob",
+  "password": "password123"
+}
+```
+
+Example Response:
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1N..."
+}
+```
+
+### `/auth/deleteAccount`
+
+Deletes an existing user's account.
+
+Example Request:
+```json
+{
+  "username": "bob",
+  "password": "password123"
+}
+```
+
+Example Response:
+```json
+{
+  "message": "Account sucesfully deleted!"
+}
+```
+
+
+
